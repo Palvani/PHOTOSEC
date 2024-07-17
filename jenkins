@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+    
+    environment {
+        scannerHome = tool name: 'SonarQube Scanner'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout your code from version control (e.g., Git)
+                git 'https://github.com/Palvani/PHOTOSEC.git'
+            }
+        }
+        
+        stage('SonarQube analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarQube Scanner'
+
+                    // Run SonarQube scanner
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=MNP-TECH-DEV \
+                            -Dsonar.sources=. \
+                            -Dsonar.host.url=http://3.138.103.196/:9000 \
+                            -Dsonar.login=cd63405a94a1549ba92b05315426f0e77234294b"
+                    }
+                }
+            }
+        }
+        
+        // Add more stages for your build, test, deploy, etc.
+    }
+
+    post {
+        always {
+            // Clean up or post-processing steps if needed
+        }
+    }
+}

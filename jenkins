@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        scannerHome = tool name: 'SonarQube Scanner'
+        scannerHome = tool name: 'SonarQube Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
     }
 
     stages {
@@ -23,7 +23,7 @@ pipeline {
                         sh "${scannerHome}/bin/sonar-scanner \
                             -Dsonar.projectKey=MNP-TECH-DEV \
                             -Dsonar.sources=. \
-                            -Dsonar.host.url=http://3.138.103.196/:9000 \
+                            -Dsonar.host.url=http://3.138.103.196:9000 \
                             -Dsonar.login=cd63405a94a1549ba92b05315426f0e77234294b"
                     }
                 }
@@ -36,6 +36,8 @@ pipeline {
     post {
         always {
             // Clean up or post-processing steps if needed
+            echo "Pipeline completed"
         }
     }
 }
+
